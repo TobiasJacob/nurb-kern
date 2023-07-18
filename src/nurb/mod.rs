@@ -32,6 +32,24 @@ impl Nurb {
         }
     }
 
+    pub fn derivative(&self) -> Nurb {
+        let mut knots: Vec<f64> = Vec::with_capacity(self.knots.len() - 2);
+        for i in 0..self.knots.len() - 2 {
+            knots.push(self.knots[i + 1]);
+        }
+        let mut control_points: Vec<controlpoint::ControlPoint> = Vec::with_capacity(self.control_points.len() - 1);
+        for i in 0..self.control_points.len() - 1 {
+            let cp = controlpoint::ControlPoint {
+                x: (self.control_points[i + 1].x - self.control_points[i].x) * (self.degree as f64 + 1.0),
+                y: (self.control_points[i + 1].y - self.control_points[i].y) * (self.degree as f64 + 1.0),
+                z: (self.control_points[i + 1].z - self.control_points[i].z) * (self.degree as f64 + 1.0),
+                w: 1.0 // TODO: self.control_points[i + 1].w - self.control_points[i].w,
+            };
+            control_points.push(cp);
+        }
+        return Nurb::new(self.degree - 1, knots, control_points);
+    }
+
     pub fn rasterize(&self, resolution: usize) -> Vec<controlpoint::ControlPoint> {
         let mut rasterized: Vec<controlpoint::ControlPoint> = Vec::with_capacity(resolution);
         for i in 0..resolution {

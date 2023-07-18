@@ -52,5 +52,7 @@ for k in range(len(knots) - p):
         Y[i, k] = n
 
 # Plot all basis functions
-plt.plot(X, Y)
+plt.plot(X, Y, color="black")
+# Plot derivative
+plt.plot(X[:-1], np.diff(Y, axis=0) / np.diff(X)[:, None], color="red")
 plt.savefig("nurbkernpy/basis3.png")
