@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # maturin develop && python -m nurbkernpy.rasterize
 
 nurb = nurbkern.Nurb(
-    degree=2,
+    degree=3,
     knots=[0, 0, 0, 1, 1, 1],
     control_points=[
         nurbkern.ControlPoint(-1, 0, 0, 1),

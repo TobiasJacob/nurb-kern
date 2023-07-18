@@ -16,8 +16,8 @@ pub struct Nurb {
 impl Nurb {
     #[new]
     pub fn new(degree: usize, knots: Vec<f64>, control_points: Vec<controlpoint::ControlPoint>) -> Self {
-        assert!(control_points.len() == degree + 1);
-        assert!(knots.len() == control_points.len() + degree + 1);
+        assert!(control_points.len() == degree);
+        assert!(knots.len() == control_points.len() + degree);
         // assert knots are sorted
         for i in 0..knots.len() - 1 {
             assert!(knots[i] <= knots[i + 1]);
@@ -39,10 +39,10 @@ impl Nurb {
             let mut cp = controlpoint::ControlPoint::new(0.0, 0.0, 0.0, 0.0);
             for j in 0..self.control_points.len() {
                 let basis = basis::basis(u, j, self.degree, &self.knots);
-                cp.x += basis * self.control_points[j].x * self.control_points[j].w;
-                cp.y += basis * self.control_points[j].y * self.control_points[j].w;
-                cp.z += basis * self.control_points[j].z * self.control_points[j].w;
-                cp.w += basis * self.control_points[j].w;
+                cp.x += basis * self.control_points[j].w * self.control_points[j].x;
+                cp.y += basis * self.control_points[j].w * self.control_points[j].y;
+                cp.z += basis * self.control_points[j].w * self.control_points[j].z;
+                cp.w += basis * self.control_points[j].w * 1.0;
             }
             cp.normalize();
             rasterized.push(cp);
